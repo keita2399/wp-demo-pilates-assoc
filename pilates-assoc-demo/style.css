@@ -1,0 +1,299 @@
+/*
+Theme Name: ピラティス指導者協会 試作テーマ
+Theme URI: https://portfolio-two-orpin-45.vercel.app/
+Author: 松井慶太
+Description: 指導者養成団体サイトの試作。料金をコースに1か所だけ持たせて全ページへ反映、目的別の3つの導線、地域で探せる認定スタジオ検索、旧URLの301転送表、事務局用の権限。外部プラグインは使わない。団体名・データはすべて架空。
+Version: 1.0.0
+Requires at least: 6.4
+Requires PHP: 8.0
+License: GPLv2 or later
+Text Domain: pilates-assoc-demo
+*/
+
+:root {
+	--c-ink: #1d2a30;
+	--c-sub: #5b6b72;
+	--c-line: #e2ddd5;
+	--c-bg: #faf8f4;
+	--c-paper: #ffffff;
+	--c-main: #1f5662;
+	--c-main-dark: #163f48;
+	--c-main-soft: #e6f0f1;
+	--c-accent: #c0703f;
+	--c-accent-soft: #f7ebe2;
+	--c-ok: #2f7d4f;
+	--c-warn: #b7791f;
+	--c-ng: #8a8f93;
+	--radius: 10px;
+	--shadow: 0 1px 2px rgba(20, 40, 50, .06), 0 4px 16px rgba(20, 40, 50, .06);
+	--font: "Hiragino Sans", "Hiragino Kaku Gothic ProN", "Noto Sans JP", "Yu Gothic UI", "Meiryo", sans-serif;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body { margin: 0; font-family: var(--font); color: var(--c-ink); background: var(--c-bg); line-height: 1.8; font-size: 16px; -webkit-text-size-adjust: 100%; }
+a { color: var(--c-main); }
+a:hover { color: var(--c-accent); }
+img { max-width: 100%; height: auto; }
+h1, h2, h3 { line-height: 1.4; font-weight: 700; letter-spacing: .02em; }
+.container { width: min(1120px, 100% - 40px); margin-inline: auto; }
+.narrow { width: min(820px, 100% - 40px); }
+.center { text-align: center; }
+.screen-reader-text { position: absolute !important; width: 1px; height: 1px; overflow: hidden; clip: rect(1px, 1px, 1px, 1px); }
+.skip-link { position: absolute; left: -9999px; }
+.skip-link:focus { left: 8px; top: 8px; z-index: 100; background: #fff; padding: 8px 12px; }
+
+/* 試作の表示 */
+.demo-bar { background: #3b3325; color: #f7ecd6; font-size: 12px; text-align: center; padding: 6px 12px; line-height: 1.5; }
+.demo-note { background: var(--c-accent-soft); border-left: 4px solid var(--c-accent); padding: 10px 14px; font-size: 14px; border-radius: 0 6px 6px 0; }
+
+/* ヘッダー */
+.site-header { background: var(--c-paper); border-bottom: 1px solid var(--c-line); position: sticky; top: 0; z-index: 50; }
+.site-header__inner { display: flex; align-items: center; justify-content: space-between; gap: 16px; min-height: 68px; }
+.site-logo { display: flex; align-items: center; gap: 10px; text-decoration: none; color: var(--c-ink); }
+.site-logo__mark { width: 38px; height: 38px; border-radius: 50%; background: var(--c-main); color: #fff; display: grid; place-items: center; font-weight: 700; font-size: 18px; letter-spacing: 0; }
+.site-logo__text { font-weight: 700; font-size: 17px; line-height: 1.2; display: flex; flex-direction: column; }
+.site-logo__text small { font-weight: 400; font-size: 11px; color: var(--c-sub); margin-top: 3px; }
+.global-nav ul { list-style: none; margin: 0; padding: 0; display: flex; gap: 4px; align-items: center; }
+.global-nav a { display: block; padding: 8px 10px; text-decoration: none; color: var(--c-ink); font-size: 14px; border-radius: 6px; white-space: nowrap; }
+.global-nav a:hover, .global-nav a[aria-current="page"] { background: var(--c-main-soft); color: var(--c-main-dark); }
+.global-nav__contact a { background: var(--c-main); color: #fff; margin-left: 6px; }
+.global-nav__contact a:hover { background: var(--c-main-dark); color: #fff; }
+.nav-toggle { display: none; background: none; border: 1px solid var(--c-line); border-radius: 8px; width: 44px; height: 44px; cursor: pointer; position: relative; }
+.nav-toggle__bar, .nav-toggle__bar::before, .nav-toggle__bar::after { content: ""; position: absolute; left: 11px; width: 20px; height: 2px; background: var(--c-ink); transition: .2s; }
+.nav-toggle__bar { top: 21px; }
+.nav-toggle__bar::before { top: -6px; left: 0; }
+.nav-toggle__bar::after { top: 6px; left: 0; }
+.nav-open .nav-toggle__bar { background: transparent; }
+.nav-open .nav-toggle__bar::before { top: 0; transform: rotate(45deg); }
+.nav-open .nav-toggle__bar::after { top: 0; transform: rotate(-45deg); }
+
+/* ボタン・バッジ */
+.btn { display: inline-flex; align-items: center; justify-content: center; gap: 4px; padding: 10px 18px; border-radius: 999px; font-size: 14px; font-weight: 700; text-decoration: none; border: 1px solid transparent; cursor: pointer; line-height: 1.4; font-family: inherit; }
+.btn--primary { background: var(--c-accent); color: #fff; }
+.btn--primary:hover { background: #a65d31; color: #fff; }
+.btn--ghost { border-color: var(--c-main); color: var(--c-main); background: transparent; }
+.btn--ghost:hover { background: var(--c-main-soft); color: var(--c-main-dark); }
+.btn--disabled { background: #eceae6; color: var(--c-ng); cursor: default; }
+.btn--block { display: flex; width: 100%; }
+.ext { font-size: 12px; }
+.badge { display: inline-block; font-size: 12px; font-weight: 700; padding: 2px 10px; border-radius: 999px; white-space: nowrap; }
+.badge--open { background: #e3f2e8; color: var(--c-ok); }
+.badge--few { background: #fff1d6; color: var(--c-warn); }
+.badge--full, .badge--closed { background: #ecebe8; color: #6b6f72; }
+.badge--upcoming { background: var(--c-main-soft); color: var(--c-main); }
+.tag { display: inline-block; font-size: 12px; padding: 1px 8px; border-radius: 4px; background: var(--c-main-soft); color: var(--c-main-dark); margin-right: 4px; white-space: nowrap; }
+.tag--accent { background: var(--c-accent-soft); color: #8d4b22; }
+.more { font-size: 14px; font-weight: 700; text-decoration: none; }
+.empty { color: var(--c-sub); background: var(--c-paper); border: 1px dashed var(--c-line); padding: 18px; border-radius: var(--radius); }
+
+/* トップ */
+.hero { background: linear-gradient(135deg, #1f5662 0%, #2c6f72 55%, #3f7f73 100%); color: #fff; position: relative; overflow: hidden; }
+.hero::after { content: ""; position: absolute; right: -120px; top: -80px; width: 520px; height: 520px; border-radius: 50%; border: 60px solid rgba(255, 255, 255, .06); }
+.hero__inner { padding: 72px 0 120px; position: relative; z-index: 1; }
+.hero__eyebrow { font-size: 14px; letter-spacing: .12em; opacity: .85; margin: 0 0 8px; }
+.hero__title { font-size: clamp(26px, 4.4vw, 42px); margin: 0 0 16px; }
+.hero__lead { margin: 0; opacity: .92; }
+.paths { margin-top: -72px; position: relative; z-index: 2; }
+.paths .section-title { color: #fff; font-size: 16px; font-weight: 400; letter-spacing: .1em; margin: 0 0 12px; }
+.paths__grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+.path-card { background: var(--c-paper); border-radius: 14px; padding: 24px 22px 20px; text-decoration: none; color: var(--c-ink); box-shadow: var(--shadow); display: flex; flex-direction: column; gap: 6px; border-top: 5px solid var(--c-main); transition: transform .15s; }
+.path-card:hover { transform: translateY(-3px); color: var(--c-ink); }
+.path-card--members { border-top-color: var(--c-accent); }
+.path-card--find { border-top-color: #7a8f4e; }
+.path-card__who { font-weight: 700; font-size: 18px; }
+.path-card__what { color: var(--c-sub); font-size: 14px; }
+.path-card__go { margin-top: auto; padding-top: 10px; font-weight: 700; color: var(--c-main); font-size: 14px; }
+
+.section { padding: 56px 0; }
+.section--tint { background: #f1ede6; }
+.section-head { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; margin-bottom: 16px; }
+.section-title { font-size: 24px; margin: 0; }
+.sub-title { font-size: 20px; margin: 40px 0 14px; padding-left: 12px; border-left: 4px solid var(--c-main); }
+.two-col { display: grid; grid-template-columns: 1.4fr 1fr; gap: 40px; }
+
+/* 開催日程の一覧 */
+.session-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
+.session { background: var(--c-paper); border: 1px solid var(--c-line); border-radius: var(--radius); padding: 16px 18px; display: grid; grid-template-columns: 270px 1fr 150px 170px; gap: 16px; align-items: center; scroll-margin-top: 90px; }
+.session:target { outline: 3px solid var(--c-accent); }
+.session__day { font-weight: 700; display: block; }
+.session__days { font-size: 12px; color: var(--c-sub); display: block; line-height: 1.5; }
+.session__course { font-weight: 700; font-size: 17px; text-decoration: none; }
+.session__meta { margin: 2px 0 0; font-size: 13px; color: var(--c-sub); display: flex; flex-wrap: wrap; gap: 4px 12px; align-items: center; }
+.session__price-label { display: block; font-size: 11px; color: var(--c-sub); }
+.session__price-value { font-weight: 700; }
+.session__action { display: flex; flex-direction: column; align-items: flex-end; gap: 6px; }
+
+/* コースカード */
+.course-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 14px; }
+.course-card { background: var(--c-paper); border-radius: var(--radius); padding: 18px; border: 1px solid var(--c-line); display: flex; flex-direction: column; }
+.course-card__cat { margin: 0; font-size: 12px; color: var(--c-accent); font-weight: 700; }
+.course-card__title { margin: 2px 0 2px; font-size: 19px; }
+.course-card__title a { text-decoration: none; color: var(--c-ink); }
+.course-card__title a:hover { color: var(--c-main); }
+.course-card__hours { margin: 0; font-size: 13px; color: var(--c-sub); }
+.course-card__price { margin: 10px 0 0; font-size: 22px; font-weight: 700; color: var(--c-main-dark); }
+.course-card__price small { font-size: 12px; font-weight: 400; color: var(--c-sub); margin-left: 6px; }
+.course-card__next { margin: 8px 0 0; padding-top: 8px; border-top: 1px dashed var(--c-line); font-size: 13px; color: var(--c-sub); }
+
+/* お知らせ */
+.news-list { list-style: none; margin: 0; padding: 0; }
+.news-list li { display: flex; gap: 14px; align-items: baseline; padding: 14px 4px; border-bottom: 1px solid var(--c-line); flex-wrap: wrap; }
+.news-list time { color: var(--c-sub); font-size: 14px; font-variant-numeric: tabular-nums; }
+.news-list a { text-decoration: none; color: var(--c-ink); font-weight: 500; }
+.news-list a:hover { color: var(--c-main); }
+.finder { background: var(--c-main-soft); border-radius: 14px; padding: 24px; }
+.finder .section-title { font-size: 20px; margin-bottom: 12px; }
+.finder__form { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+.finder__form label { font-size: 14px; }
+.finder__note { font-size: 13px; color: var(--c-sub); margin: 12px 0 0; }
+
+/* 下層ページ */
+.page-hero { background: var(--c-paper); border-bottom: 1px solid var(--c-line); padding: 18px 0 30px; }
+.page-hero h1 { font-size: clamp(24px, 3.4vw, 34px); margin: 6px 0 6px; }
+.page-hero p { margin: 0; color: var(--c-sub); }
+.page-hero__cat { font-size: 13px; color: var(--c-accent) !important; font-weight: 700; }
+.page-hero--start { border-top: 5px solid var(--c-main); }
+.page-hero--members { border-top: 5px solid var(--c-accent); }
+.page-hero--find { border-top: 5px solid #7a8f4e; }
+.breadcrumb ol { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; font-size: 12px; color: var(--c-sub); }
+.breadcrumb li + li::before { content: "›"; margin: 0 8px; }
+.breadcrumb a { color: var(--c-sub); }
+.content { padding: 32px 0 72px; }
+.section-block { margin-bottom: 40px; }
+.section-block > h2 { font-size: 22px; }
+.entry h2 { font-size: 20px; margin-top: 2em; }
+.entry .price-inline { font-weight: 700; background: linear-gradient(transparent 60%, #f5dcc8 60%); }
+
+.flow { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; counter-reset: none; }
+.flow li { background: var(--c-paper); border: 1px solid var(--c-line); border-radius: var(--radius); padding: 16px; display: flex; flex-direction: column; gap: 4px; position: relative; }
+.flow li span:last-child { font-size: 13px; color: var(--c-sub); }
+.flow__no { width: 28px; height: 28px; border-radius: 50%; background: var(--c-main); color: #fff; display: grid; place-items: center; font-weight: 700; font-size: 14px; }
+.cards-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-bottom: 32px; }
+.info-card { background: var(--c-paper); border: 1px solid var(--c-line); border-radius: var(--radius); padding: 18px; text-decoration: none; color: var(--c-ink); display: flex; flex-direction: column; gap: 4px; }
+.info-card span { font-size: 13px; color: var(--c-sub); }
+.info-card:hover { border-color: var(--c-accent); color: var(--c-ink); }
+
+.table-wrap { overflow-x: auto; }
+.table { width: 100%; border-collapse: collapse; background: var(--c-paper); border-radius: var(--radius); overflow: hidden; font-size: 15px; }
+.table th, .table td { padding: 12px 14px; border-bottom: 1px solid var(--c-line); text-align: left; vertical-align: top; }
+.table thead th { background: var(--c-main-soft); font-size: 13px; color: var(--c-main-dark); white-space: nowrap; }
+.table .num { text-align: right; white-space: nowrap; font-variant-numeric: tabular-nums; }
+.table tbody th { font-weight: 700; white-space: nowrap; }
+
+.course-layout { display: grid; grid-template-columns: 1fr 320px; gap: 36px; align-items: start; }
+.course-layout .session { grid-template-columns: 200px 1fr 170px; }
+.course-layout .session__price { display: none; }
+.spec { background: var(--c-paper); border: 1px solid var(--c-line); border-radius: 14px; padding: 20px; position: sticky; top: 90px; }
+.spec dl { margin: 0 0 16px; display: grid; grid-template-columns: auto 1fr; gap: 8px 14px; font-size: 14px; }
+.spec dt { color: var(--c-sub); white-space: nowrap; }
+.spec dd { margin: 0; }
+.spec__total { font-size: 22px; font-weight: 700; color: var(--c-main-dark); }
+.spec__note { font-size: 12px; color: var(--c-sub); margin: 8px 0 0; }
+.narrow .spec { position: static; margin: 16px 0; }
+
+/* 検索 */
+.tabs { display: flex; gap: 4px; border-bottom: 2px solid var(--c-line); margin-bottom: 18px; }
+.tabs__tab { padding: 10px 22px; text-decoration: none; color: var(--c-sub); font-weight: 700; border-radius: 8px 8px 0 0; margin-bottom: -2px; border-bottom: 2px solid transparent; }
+.tabs__tab[aria-selected="true"] { color: var(--c-main-dark); border-bottom-color: var(--c-main); background: var(--c-paper); }
+.search-form { background: var(--c-paper); border: 1px solid var(--c-line); border-radius: var(--radius); padding: 16px; margin-bottom: 18px; }
+.search-form__row { display: flex; flex-wrap: wrap; gap: 12px; align-items: flex-end; }
+.search-form label { display: flex; flex-direction: column; font-size: 12px; color: var(--c-sub); gap: 4px; }
+.search-form__kw { flex: 1 1 180px; }
+select, input[type="search"] { font: inherit; font-size: 15px; padding: 8px 10px; border: 1px solid #cfc9bf; border-radius: 8px; background: #fff; color: var(--c-ink); min-height: 42px; }
+.result-count { font-weight: 700; }
+.result-grid { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 12px; }
+.result-card { background: var(--c-paper); border: 1px solid var(--c-line); border-radius: var(--radius); padding: 16px; }
+.result-card__area { margin: 0; font-size: 12px; color: var(--c-sub); }
+.result-card__name { margin: 2px 0 8px; font-size: 17px; }
+.result-card__name a { text-decoration: none; }
+.result-card__sub { margin: 0; font-size: 13px; color: var(--c-sub); }
+
+/* カレンダー */
+.cal-nav { display: flex; justify-content: space-between; align-items: center; margin: 8px 0 12px; }
+.cal-nav__title { margin: 0; font-size: 22px; }
+.calendar { width: 100%; border-collapse: collapse; table-layout: fixed; background: var(--c-paper); }
+.calendar th { font-size: 12px; padding: 6px; background: #f1ede6; border: 1px solid var(--c-line); }
+.calendar th.sun { color: #b4483d; }
+.calendar th.sat { color: #3d6cb4; }
+.calendar td { border: 1px solid var(--c-line); vertical-align: top; height: 96px; padding: 4px; }
+.calendar td.other { background: #f6f4f0; }
+.calendar td.other .calendar__d { color: #c3bdb3; }
+.calendar td.today { background: #fffbea; }
+.calendar__d { font-size: 12px; color: var(--c-sub); display: block; }
+.calendar__ev { display: block; font-size: 11px; line-height: 1.35; padding: 3px 5px; border-radius: 4px; background: var(--c-main-soft); color: var(--c-main-dark); text-decoration: none; margin-top: 3px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.calendar__ev span { margin-left: 4px; opacity: .75; }
+.calendar__ev--few { background: #fff1d6; color: #7a5212; }
+.calendar__ev--full, .calendar__ev--closed { background: #ecebe8; color: #6b6f72; }
+.calendar__ev--upcoming { background: #eef0f5; color: #4a5872; }
+
+/* フッター */
+.site-footer { background: #1c3238; color: #cfdcde; padding: 48px 0 0; font-size: 14px; }
+.site-footer a { color: #e6eff0; text-decoration: none; }
+.site-footer a:hover { color: #fff; text-decoration: underline; }
+.site-footer__grid { display: grid; grid-template-columns: 1.3fr 1fr 1fr 1fr; gap: 24px; }
+.site-footer ul { list-style: none; margin: 0; padding: 0; }
+.site-footer li { margin-bottom: 6px; }
+.site-footer__name { font-weight: 700; font-size: 17px; color: #fff; margin: 0 0 6px; }
+.site-footer__note { font-size: 12px; opacity: .8; }
+.site-footer__head { font-weight: 700; color: #fff; margin: 0 0 8px; }
+.site-footer__bottom { border-top: 1px solid rgba(255, 255, 255, .12); margin-top: 32px; padding: 16px 0 24px; opacity: .7; }
+.link-list li { margin-bottom: 6px; }
+.nav-links { display: flex; gap: 8px; margin-top: 20px; }
+.page-numbers { padding: 6px 12px; border: 1px solid var(--c-line); border-radius: 6px; text-decoration: none; background: #fff; }
+.page-numbers.current { background: var(--c-main); color: #fff; }
+
+/* ---------- タブレット ---------- */
+@media (max-width: 1080px) {
+	.nav-toggle { display: block; }
+	.global-nav { position: absolute; left: 0; right: 0; top: 100%; background: var(--c-paper); border-bottom: 1px solid var(--c-line); box-shadow: var(--shadow); display: none; }
+	.nav-open .global-nav { display: block; }
+	.global-nav ul { flex-direction: column; align-items: stretch; padding: 8px 20px 16px; gap: 0; }
+	.global-nav a { padding: 14px 8px; border-bottom: 1px solid var(--c-line); border-radius: 0; font-size: 16px; }
+	.global-nav__contact a { margin: 12px 0 0; border-radius: 999px; text-align: center; border: 0; }
+	.session { grid-template-columns: 180px 1fr; }
+	.session__price, .session__action { grid-column: auto; }
+	.session__action { flex-direction: row; align-items: center; justify-content: flex-end; }
+	.course-layout { grid-template-columns: 1fr; }
+	.course-layout .session { grid-template-columns: 180px 1fr; }
+	.spec { position: static; }
+	.site-footer__grid { grid-template-columns: 1fr 1fr; }
+}
+
+/* ---------- スマートフォン ---------- */
+@media (max-width: 720px) {
+	body { font-size: 15px; }
+	.container, .narrow { width: calc(100% - 32px); }
+	.hero__inner { padding: 44px 0 96px; }
+	.paths__grid, .cards-3, .two-col, .flow { grid-template-columns: 1fr; }
+	.path-card { padding: 18px; }
+	.path-card__who { font-size: 17px; }
+	.section { padding: 40px 0; }
+	.section-title { font-size: 21px; }
+	.session, .course-layout .session { grid-template-columns: 1fr; gap: 8px; padding: 14px; }
+	.session__price { display: flex; gap: 8px; align-items: baseline; }
+	.session__price-label { display: inline; }
+	.session__action { justify-content: space-between; }
+	.session__action .btn { flex: 1; }
+	.calendar thead { display: none; }
+	.calendar, .calendar tbody, .calendar tr, .calendar td { display: block; width: 100%; }
+	.calendar td { height: auto; border: 0; border-bottom: 1px solid var(--c-line); padding: 0; }
+	.calendar td:not(:has(.calendar__ev)) { display: none; }
+	.calendar td:has(.calendar__ev) { padding: 8px 10px; }
+	.calendar__d::after { content: "日"; }
+	.calendar__ev { white-space: normal; font-size: 13px; }
+	.search-form__row { flex-direction: column; align-items: stretch; }
+	.search-form select, .search-form input { width: 100%; }
+	.table--fees thead { display: none; }
+	.table--fees, .table--fees tbody, .table--fees tr, .table--fees th, .table--fees td { display: block; width: 100%; }
+	.table--fees tr { border-bottom: 1px solid var(--c-line); padding: 10px 0; }
+	.table--fees th, .table--fees td { border: 0; padding: 2px 14px; text-align: left !important; }
+	.table--fees td:nth-of-type(2)::before { content: "時間："; color: var(--c-sub); }
+	.table--fees td:nth-of-type(3)::before { content: "受講料："; color: var(--c-sub); }
+	.table--fees td:nth-of-type(4)::before { content: "試験料："; color: var(--c-sub); }
+	.table--fees td:nth-of-type(5)::before { content: "合計："; color: var(--c-sub); }
+	.table--fees td:nth-of-type(6)::before { content: "前提："; color: var(--c-sub); }
+	.site-footer__grid { grid-template-columns: 1fr; }
+	.cal-nav .btn { padding: 8px 12px; font-size: 13px; }
+	.cal-nav__title { font-size: 18px; }
+}
