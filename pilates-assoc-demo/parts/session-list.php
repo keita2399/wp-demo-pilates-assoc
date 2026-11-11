@@ -36,8 +36,8 @@ foreach ( $sessions as $s ) :
 			<span class="session__price-value"><?php echo esc_html( $d['price_label'] ); ?></span>
 		</div>
 		<div class="session__action">
-			<?php echo phi_status_badge( $d['status'], $d['status_label'] ); // phpcs:ignore WordPress.Security.EscapeOutput ?>
-			<?php echo phi_apply_button( $d ); // phpcs:ignore WordPress.Security.EscapeOutput ?>
+			<?php echo wp_kses_post( phi_status_badge( $d['status'], $d['status_label'] ) ); ?>
+			<?php echo wp_kses_post( phi_apply_button( $d ) ); ?>
 		</div>
 	</li>
 <?php endforeach; ?>

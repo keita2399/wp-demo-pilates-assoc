@@ -5,7 +5,10 @@ get_header();
 // phpcs:disable WordPress.Security.NonceVerification.Recommended
 $tz     = wp_timezone();
 $now    = new DateTimeImmutable( 'now', $tz );
-$ym     = isset( $_GET['ym'] ) && preg_match( '/^\d{4}-\d{2}$/', wp_unslash( $_GET['ym'] ) ) ? wp_unslash( $_GET['ym'] ) : $now->format( 'Y-m' ); // phpcs:ignore
+$ym     = isset( $_GET['ym'] ) ? sanitize_text_field( wp_unslash( $_GET['ym'] ) ) : '';
+if ( ! preg_match( '/^\d{4}-(0[1-9]|1[0-2])$/', $ym ) ) {
+	$ym = $now->format( 'Y-m' );
+}
 $course = isset( $_GET['course'] ) ? absint( $_GET['course'] ) : 0;
 $region = isset( $_GET['region'] ) ? sanitize_text_field( wp_unslash( $_GET['region'] ) ) : '';
 $format = isset( $_GET['format'] ) ? sanitize_key( wp_unslash( $_GET['format'] ) ) : '';

@@ -170,7 +170,13 @@ add_action( 'save_post', function ( $post_id, $post ) {
 		return;
 	}
 	foreach ( phi_meta_fields( $post->post_type ) as $key => $f ) {
-		$raw = isset( $_POST[ $key ] ) ? wp_unslash( $_POST[ $key ] ) : null; // phpcs:ignore WordPress.Security.ValidatedSanitizedInput
+		if ( ! isset( $_POST[ $key ] ) ) {
+			$raw = null;
+		} elseif ( 'url' === $f['type'] ) {
+			$raw = esc_url_raw( wp_unslash( $_POST[ $key ] ) );
+		} else {
+			$raw = map_deep( wp_unslash( $_POST[ $key ] ), 'sanitize_text_field' );
+		}
 		switch ( $f['type'] ) {
 			case 'checkboxes':
 				$val = is_array( $raw ) ? array_values( array_intersect( array_map( 'strval', $raw ), array_map( 'strval', array_keys( $f['options'] ) ) ) ) : array();

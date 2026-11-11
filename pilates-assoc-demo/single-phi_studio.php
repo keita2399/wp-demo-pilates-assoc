@@ -33,7 +33,7 @@ $people    = get_posts(
 		</dl>
 		<?php if ( get_post_meta( $id, '_phi_url', true ) ) : ?>
 			<?php $surl = get_post_meta( $id, '_phi_url', true ); ?>
-			<a class="btn btn--primary" href="<?php echo esc_url( phi_out_url( $surl, array( 'service' => 'studio', 'studio' => $id ) ) ); ?>"<?php echo phi_out_target( $surl ); // phpcs:ignore ?>>スタジオのWebサイトへ<span class="ext" aria-hidden="true">↗</span></a>
+			<a class="btn btn--primary" href="<?php echo esc_url( phi_out_url( $surl, array( 'service' => 'studio', 'studio' => $id ) ) ); ?>"<?php if ( ! phi_is_dummy_url( $surl ) ) : ?> target="_blank" rel="noopener"<?php endif; ?>>スタジオのWebサイトへ<span class="ext" aria-hidden="true">↗</span></a>
 		<?php endif; ?>
 	</div>
 	<p><a class="more" href="<?php echo esc_url( add_query_arg( 'pref', get_post_meta( $id, '_phi_prefecture', true ), phi_page_url( 'studios' ) ) ); ?>">同じ都道府県のスタジオ →</a></p>

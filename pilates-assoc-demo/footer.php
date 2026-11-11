@@ -29,7 +29,7 @@
 				<li><a href="<?php echo esc_url( phi_page_url( 'about' ) ); ?>">協会について</a></li>
 				<li><a href="<?php echo esc_url( phi_page_url( 'news' ) ); ?>">お知らせ</a></li>
 				<li><a href="<?php echo esc_url( phi_page_url( 'contact' ) ); ?>">お問い合わせ</a></li>
-				<li><a href="<?php echo esc_url( phi_out_url( 'https://example.com/shop/', array( 'service' => 'shop' ) ) ); ?>"<?php echo phi_out_target( 'https://example.com/shop/' ); // phpcs:ignore ?>>オンラインショップ（外部サイト）</a></li>
+				<li><a href="<?php echo esc_url( phi_out_url( 'https://example.com/shop/', array( 'service' => 'shop' ) ) ); ?>"<?php if ( ! phi_is_dummy_url( 'https://example.com/shop/' ) ) : ?> target="_blank" rel="noopener"<?php endif; ?>>オンラインショップ（外部サイト）</a></li>
 			</ul>
 		</div>
 	</div>

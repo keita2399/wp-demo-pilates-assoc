@@ -46,7 +46,7 @@ add_action( 'template_redirect', function () {
 	if ( ! $map ) {
 		return;
 	}
-	$request = isset( $_SERVER['REQUEST_URI'] ) ? wp_unslash( $_SERVER['REQUEST_URI'] ) : ''; // phpcs:ignore WordPress.Security.ValidatedSanitizedInput
+	$request = isset( $_SERVER['REQUEST_URI'] ) ? esc_url_raw( wp_unslash( $_SERVER['REQUEST_URI'] ) ) : '';
 	// サブディレクトリに置いた場合（Playground など）に備えて、サイトのパスを外す。
 	$base = (string) wp_parse_url( home_url( '/' ), PHP_URL_PATH );
 	if ( $base && '/' !== $base && 0 === strpos( $request, rtrim( $base, '/' ) ) ) {
