@@ -69,7 +69,7 @@ h1, h2, h3 { line-height: 1.4; font-weight: 700; letter-spacing: .02em; }
 .nav-open .nav-toggle__bar::after { top: 0; transform: rotate(-45deg); }
 
 /* ボタン・バッジ */
-.btn { display: inline-flex; align-items: center; justify-content: center; gap: 4px; padding: 10px 18px; border-radius: 999px; font-size: 14px; font-weight: 700; text-decoration: none; border: 1px solid transparent; cursor: pointer; line-height: 1.4; font-family: inherit; }
+.btn { white-space: nowrap; display: inline-flex; align-items: center; justify-content: center; gap: 4px; padding: 10px 18px; border-radius: 999px; font-size: 14px; font-weight: 700; text-decoration: none; border: 1px solid transparent; cursor: pointer; line-height: 1.4; font-family: inherit; }
 .btn--primary { background: var(--c-accent); color: #fff; }
 .btn--primary:hover { background: #a65d31; color: #fff; }
 .btn--ghost { border-color: var(--c-main); color: var(--c-main); background: transparent; }
@@ -255,7 +255,8 @@ select, input[type="search"] { font: inherit; font-size: 15px; padding: 8px 10px
 	.session__price, .session__action { grid-column: auto; }
 	.session__action { flex-direction: row; align-items: center; justify-content: flex-end; }
 	.course-layout { grid-template-columns: 1fr; }
-	.course-layout .session { grid-template-columns: 180px 1fr; }
+	.course-layout .session { grid-template-columns: 1fr; }
+	.session__action { flex-wrap: wrap; }
 	.spec { position: static; }
 	.site-footer__grid { grid-template-columns: 1fr 1fr; }
 }
