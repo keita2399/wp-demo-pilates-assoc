@@ -283,7 +283,29 @@ function phi_apply_button( $data, $class = '' ) {
 	if ( ! $data['apply_url'] ) {
 		return '';
 	}
-	return '<a class="btn btn--primary ' . esc_attr( $class ) . '" href="' . esc_url( $data['apply_url'] ) . '" target="_blank" rel="noopener">申込フォームへ<span class="ext" aria-hidden="true">↗</span></a>';
+	$url = phi_out_url( $data['apply_url'], array( 'service' => 'apply', 'session' => $data['id'] ) );
+	return '<a class="btn btn--primary ' . esc_attr( $class ) . '" href="' . esc_url( $url ) . '"' . phi_out_target( $data['apply_url'] ) . '>申込フォームへ<span class="ext" aria-hidden="true">↗</span></a>';
+}
+
+/**
+ * 試作用：架空のURL（example.com）へのリンクは、試作の中の案内ページに差し替える。
+ * 本番では外部サービスのURLがそのまま使われる。
+ */
+function phi_is_dummy_url( $url ) {
+	$host = (string) wp_parse_url( $url, PHP_URL_HOST );
+	return 'example.com' === $host || '.example.com' === substr( $host, -12 );
+}
+
+function phi_out_url( $url, $args = array() ) {
+	if ( ! phi_is_dummy_url( $url ) ) {
+		return $url;
+	}
+	return add_query_arg( $args, phi_page_url( 'external-demo' ) );
+}
+
+/** 外部リンクの target 属性（試作の案内ページへ行くときは同じタブ） */
+function phi_out_target( $url ) {
+	return phi_is_dummy_url( $url ) ? '' : ' target="_blank" rel="noopener"';
 }
 
 /** 固定ページの URL をスラッグで */
