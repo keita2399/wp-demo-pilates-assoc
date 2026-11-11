@@ -40,4 +40,4 @@ https://playground.wordpress.net/?mode=seamless&blueprint-url=https://raw.github
 | inc/security.php | バージョン非表示、XML-RPC停止、ユーザー名の漏えい防止など |
 | inc/seed.php | ダミーデータ |
 
-作成：松井慶太（https://portfolio-two-orpin-45.vercel.app/ ）
+作成：松井慶太
