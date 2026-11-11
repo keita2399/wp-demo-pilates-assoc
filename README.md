@@ -4,7 +4,7 @@
 
 ## 開く
 
-https://playground.wordpress.net/?blueprint-url=https://raw.githubusercontent.com/keita2399/wp-demo-pilates-assoc/main/blueprint.json
+https://playground.wordpress.net/?mode=seamless&blueprint-url=https://raw.githubusercontent.com/keita2399/wp-demo-pilates-assoc/main/blueprint.json
 
 ブラウザの中で WordPress が立ち上がります（サーバー不要、30秒ほどかかります）。管理者でログインした状態で開くので、管理画面（左上の「ピラティス指導者協会」→ ダッシュボード）も操作できます。何を変えても、URLを開き直せば最初の状態に戻ります。
 
